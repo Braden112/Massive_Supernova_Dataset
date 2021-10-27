@@ -4,62 +4,6 @@ Created on Mon Jul 12 15:57:28 2021
 
 @author: blgnm
 """
-
-full_list = pd.read_csv('C:/Users/blgnm/SN_and_Host_Clasification/almost_final.csv')['event']
-unlabeled = pd.DataFrame()
-#%%
-for i in full_list[3236:]:
-    b = Flag_Object(i)[0]
-
-# =============================================================================
-#     b = b.loc[:,~b.columns.duplicated()]
-#     b = b.reindex(columns = col)
-# =============================================================================
-    unlabeled = unlabeled.append(pd.DataFrame({'host_type':[b], 'ztf_id':[i]})).reset_index(drop=True)
-    print(unlabeled)
-
-train_list = pd.read_csv('C:/Users/blgnm/SN_and_Host_Clasification/3kList.txt')['ZTFID']
-labeled = pd.DataFrame()
-for i in train_list:
-    b = Flag_Object(i)[0]
-# =============================================================================
-#     b = b.loc[:,~b.columns.duplicated()]
-#     b = b.reindex(columns = col)
-# =============================================================================
-    labeled = labeled.append(pd.DataFrame({'host_type':[b], 'ztf_id':[i]})).reset_index(drop=True)
-  
-    
-    print(labeled)
-#%%
-print(unlabeled)
-#%%
-
-#%%
-for i in full_list[3236:]:
-    print(i)
-    break
-#%%
-print(unlabeled)
-#%%
-col = ['objID', 'primaryDetection', 'bestDetection', 'QualityFlag', 'raMean', 'decMean', 'objName', 'gPSFMag', 'gPSFMagErr', 'gApMag', 'gApMagErr', 'gKronMag', 'gKronMagErr', 'gpsfMajorFWHM', 'gpsfMinorFWHM', 'gmomentXX', 'gmomentXY', 'gmomentYY', 'gmomentR1', 'gmomentRH', 'gPSFFlux', 'gPSFFluxErr', 'gApFlux', 'gApFluxErr', 'gApRadius', 'gKronFlux', 'gKronFluxErr', 'gKronRad', 'gExtNSigma', 'rPSFMag', 'rPSFMagErr', 'rApMag', 'rApMagErr', 'rKronMag', 'rKronMagErr', 'rpsfMajorFWHM', 'rpsfMinorFWHM', 'rmomentXX', 'rmomentXY', 'rmomentYY', 'rmomentR1', 'rmomentRH', 'rPSFFlux', 'rPSFFluxErr', 'rApFlux', 'rApFluxErr', 'rApRadius', 'rKronFlux', 'rKronFluxErr', 'rKronRad', 'rExtNSigma', 'iPSFMag', 'iPSFMagErr', 'iApMag', 'iApMagErr', 'iKronMag', 'iKronMagErr', 'ipsfMajorFWHM', 'ipsfMinorFWHM', 'imomentXX', 'imomentXY', 'imomentYY', 'imomentR1', 'imomentRH', 'iPSFFlux', 'iPSFFluxErr', 'iApFlux', 'iApFluxErr', 'iApRadius', 'iKronFlux', 'iKronFluxErr', 'iKronRad', 'iExtNSigma', 'zPSFMag', 'zPSFMagErr', 'zApMag', 'zApMagErr', 'zKronMag', 'zKronMagErr', 'zpsfMajorFWHM', 'zpsfMinorFWHM', 'zmomentXX', 'zmomentXY', 'zmomentYY', 'zmomentR1', 'zmomentRH', 'zPSFFlux', 'zPSFFluxErr', 'zApFlux', 'zApFluxErr', 'zApRadius', 'zKronFlux', 'zKronFluxErr', 'zKronRad', 'zExtNSigma', 'yPSFMag', 'yPSFMagErr', 'yApMag', 'yApMagErr', 'yKronMag', 'yKronMagErr', 'ypsfMajorFWHM', 'ypsfMinorFWHM', 'ymomentXX', 'ymomentXY', 'ymomentYY', 'ymomentR1', 'ymomentRH', 'yPSFFlux', 'yPSFFluxErr', 'yApFlux', 'yApFluxErr', 'yApRadius', 'yKronFlux', 'yKronFluxErr', 'yKronRad', 'yExtNSigma', 'i-z', 'g-r', 'r-i', 'g-i', 'z-y', 'g-rErr', 'r-iErr', 'i-zErr', 'z-yErr', 'gApMag_gKronMag', 'rApMag_rKronMag', 'iApMag_iKronMag', 'zApMag_zKronMag', 'yApMag_yKronMag', '7DCD', 'label', 'distance', 'R']
-print(b[list(b.columns) in col ==True])
-#%%
-print(Flag_Object('ZTF21aaabvit'))
-#%%
-print(Gaia_search(186.61304886, 31.22351592, .002))
-#%%
-ra = 186.61304886
-dec = 31.22351592
-radius = .002
-
-coord = SkyCoord(ra, dec, unit=(u.degree, u.degree), frame='icrs')
-radius = u.Quantity(radius, u.deg)
-j = Gaia.cone_search_async(coord, radius, table_name = 'gaiaedr3.gaia_source')
-print(j)
-r = j.get_results()
-#%%
-print(r.columns)
-#%%
 import pickle
 import numpy as np
 import pandas as pd
@@ -193,7 +137,7 @@ def FindHost(ra, dec):
     else:
         return host['label'].values[0], (host['raMean'].values[0], host['decMean'].values[0]), host
 
-#%%
+
 def initial_filter(panstars_df):
     canidates = list()
     panstars_df = panstars_df[((panstars_df['gPSFMag']!=-999) & (panstars_df['rPSFMag']!=-999) & (panstars_df['iPSFMag']!=-999))].reset_index(drop=True)
